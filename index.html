@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кітапхана: Кітап беру жүйесі</title>
+    <style>
+        /* Негізгі стильдер */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eff3f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Карточка дизайны */
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        /* Форма элементтері */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            box-sizing: border-box; /* Padding өлшемді бұзбауы үшін */
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        /* Түйме */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* Нәтиже терезесі */
+        #messageBox {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            display: none; /* Басында жасырын тұрады */
+        }
+
+        /* Статустарға арналған түстер */
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>📚 Кітап беру</h2>
+        
+        <div class="form-group">
+            <label for="bookName">Кітап атауы:</label>
+            <input type="text" id="bookName" placeholder="Мысалы: Қара сөздер">
+        </div>
+
+        <div class="form-group">
+            <label for="availability">Қорда бар ма?</label>
+            <select id="availability">
+                <option value="yes">✅ Иә, сөреде бар</option>
+                <option value="no">❌ Жоқ, бітіп қалған</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="userDebt">Оқырман қарызы:</label>
+            <select id="userDebt">
+                <option value="no">✅ Қарызы жоқ</option>
+                <option value="yes">❌ Қарызы бар</option>
+            </select>
+        </div>
+
+        <button onclick="checkIssue()">Кітапты беру</button>
+
+        <div id="messageBox"></div>
+    </div>
+
+    <script>
+        function checkIssue() {
+            // Енгізілген мәндерді аламыз
+            const bookName = document.getElementById('bookName').value;
+            const isAvailable = document.getElementById('availability').value;
+            const hasDebt = document.getElementById('userDebt').value;
+            const msgBox = document.getElementById('messageBox');
+
+            // Хабарламаны көрсету функциясы
+            function showMessage(text, type) {
+                msgBox.style.display = 'block';
+                msgBox.className = type; // success, error немесе warning классын қосамыз
+                msgBox.innerHTML = text;
+            }
+
+            // 1. Кітап аты жазылмаса
+            if (bookName.trim() === "") {
+                showMessage("Кітаптың атын жазыңыз!", "warning");
+                return;
+            }
+
+            // 2. ЛОГИКА (Тапсырма бойынша)
+            
+            // Шарт 1: Кітап бар ма?
+            if (isAvailable === 'no') {
+                showMessage(`Кешіріңіз, <b>"${bookName}"</b> кітабы қазір кітапханада жоқ.`, "error");
+            } 
+            // Шарт 2: Қарызы бар ма?
+            else if (hasDebt === 'yes') {
+                showMessage("Оқырманның қарызы бар! Алдымен ескі кітаптарды өткізу керек.", "error");
+            } 
+            // Егер бәрі дұрыс болса
+            else {
+                showMessage(`Сәтті! <b>"${bookName}"</b> кітабы оқырманға берілді.`, "success");
+            }
+        }
+    </script>
+
+</body>
+</html>

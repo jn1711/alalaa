@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кітапхана: Кітап беру жүйесі</title>
+    <title>Кітапхана: Кітап іздеу жүйесі</title>
     <style>
         /* Негізгі стильдер */
         body {
@@ -110,40 +110,22 @@
 <body>
 
     <div class="card">
-        <h2>📚 Кітап беру</h2>
+        <h2>📚 Кітап іздеу</h2>
         
         <div class="form-group">
-            <label for="bookName">Кітап атауы:</label>
+            <label for="bookName">Іздейтін кітаптың атауы:</label>
             <input type="text" id="bookName" placeholder="Мысалы: Қара сөздер">
         </div>
 
-        <div class="form-group">
-            <label for="availability">Қорда бар ма?</label>
-            <select id="availability">
-                <option value="yes">✅ Иә, сөреде бар</option>
-                <option value="no">❌ Жоқ, бітіп қалған</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="userDebt">Оқырман қарызы:</label>
-            <select id="userDebt">
-                <option value="no">✅ Қарызы жоқ</option>
-                <option value="yes">❌ Қарызы бар</option>
-            </select>
-        </div>
-
-        <button onclick="checkIssue()">Кітапты беру</button>
+        <button onclick="searchBook()">Іздеу</button>
 
         <div id="messageBox"></div>
     </div>
 
     <script>
-        function checkIssue() {
+        function searchBook() {
             // Енгізілген мәндерді аламыз
             const bookName = document.getElementById('bookName').value;
-            const isAvailable = document.getElementById('availability').value;
-            const hasDebt = document.getElementById('userDebt').value;
             const msgBox = document.getElementById('messageBox');
 
             // Хабарламаны көрсету функциясы
@@ -155,23 +137,25 @@
 
             // 1. Кітап аты жазылмаса
             if (bookName.trim() === "") {
-                showMessage("Кітаптың атын жазыңыз!", "warning");
+                showMessage("Іздейтін кітаптың атын жазыңыз!", "warning");
                 return;
             }
 
-            // 2. ЛОГИКА (Тапсырма бойынша)
-            
-            // Шарт 1: Кітап бар ма?
-            if (isAvailable === 'no') {
-                showMessage(`Кешіріңіз, <b>"${bookName}"</b> кітабы қазір кітапханада жоқ.`, "error");
-            } 
-            // Шарт 2: Қарызы бар ма?
-            else if (hasDebt === 'yes') {
-                showMessage("Оқырманның қарызы бар! Алдымен ескі кітаптарды өткізу керек.", "error");
-            } 
-            // Егер бәрі дұрыс болса
-            else {
-                showMessage(`Сәтті! <b>"${bookName}"</b> кітабы оқырманға берілді.`, "success");
+            // 2. Рандомды кітап барма жоқпа тексеру (50/50 ықтималдық)
+            const bookExists = Math.random() < 0.5;
+
+            if (!bookExists) {
+                showMessage(`❌ <b>"${bookName}"</b> кітабы кітапханада жоқ.`, "error");
+                return;
+            }
+
+            // 3. Кітап бар болса, рандомды қарыз тексеру (50/50 ықтималдық)
+            const hasDebt = Math.random() < 0.5;
+
+            if (hasDebt) {
+                showMessage(`⚠️ <b>"${bookName}"</b> кітабы бар, бірақ сіздің қарызыңыз бар! Алдымен ескі кітаптарды қайтарыңыз.`, "warning");
+            } else {
+                showMessage(`✅ <b>"${bookName}"</b> кітабы бар және қарызыңыз жоқ! Кітапты ала аласыз.`, "success");
             }
         }
     </script>
